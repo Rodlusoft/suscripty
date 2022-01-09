@@ -47,7 +47,7 @@ export const signUpWithEmail: (
   return authResponse;
 };
 
-export const signIpWithEmail: (email: string, password: string) => Promise<TAuthOperation> =
+export const signInWithEmail: (email: string, password: string) => Promise<TAuthOperation> =
 async (email, password) => {
   const auth = getAuth()
   let authResponse: TAuthOperation = { status: false }

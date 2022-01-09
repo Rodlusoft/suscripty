@@ -1,8 +1,8 @@
 
-interface TAuthOperation { 
+interface IAuthOperation { 
   status: boolean;
   uid?: string;
   error?: string;
 }
 
-export default TAuthOperation
+export default IAuthOperation
