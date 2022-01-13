@@ -1,7 +1,8 @@
 import { useRouter } from "next/router"
 import { useState } from "react"
 import ImagePicker from "../../components/auth/signUp/ImagePicker"
-import { AuthMethod } from "../../interfaces/authMethod"
+import { signUpWithEmail } from "../../firebase/auth"
+import IAuthMethod from "../../interfaces/authMethod"
 
 const SignUpForm = () => {
 
@@ -10,6 +11,7 @@ const SignUpForm = () => {
   const [username, setUsername] = useState<string>("")
   const [isValidUser, setIsValidUser] = useState<boolean>(false)
   const [image, setImage] = useState<File>()
+  const [authMethod, setAuthMethod] = useState<IAuthMethod>()
   const router = useRouter()
 
   const handleClick = async () => {
@@ -19,33 +21,8 @@ const SignUpForm = () => {
   }
 
   const checkUserAuthentication: () => void = async () => {
-    const method = AuthMethod.email
-
-    const response = await fetch(
-      '/api/auth/signUp',
-      {
-        method: "POST",
-        body: JSON.stringify({
-          username: username,
-          email: email,
-          password: password,
-          image: image,
-          method: method
-        })
-      })
-
-    console.log({
-      username: username,
-      email: email,
-      password: password,
-      image: image,
-      method: method
-    })
-    const user = await response.json()
-
-    console.log(await user)
-
-    return user
+    // do a switch with all authentication methods
+    signUpWithEmail(email, password, username, image)
   }
 
   const checkIfUserValid: () => boolean = () => {

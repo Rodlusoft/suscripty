@@ -1,4 +1,3 @@
-
 interface IAuthOperation { 
   status: boolean;
   uid?: string;

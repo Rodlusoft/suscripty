@@ -13,7 +13,7 @@ export const signUpWithEmail: (
   email: string,
   password: string,
   username: string,
-  image: any
+  image: File
 ) => Promise<TAuthOperation> = async (email, password, username, image) => {
   const auth = getAuth();
   let authResponse: TAuthOperation = { status: false };
