@@ -52,25 +52,19 @@ export const signInWithEmail: (
   const auth = getAuth();
   let authResponse: IAuthOperation = { status: false };
 
-  console.log(`${email}`);
-  console.log(`${password}`);
-
   return await signInWithEmailAndPassword(auth, email, password)
     .then(async (userCredential: UserCredential) => {
-      console.log("entra");
       const user = userCredential.user;
       authResponse.uid = user.uid;
       authResponse.status = true;
       getUserById(user.uid);
-
-      console.log("entra");
 
       return authResponse;
     })
     .catch((error) => {
       const errorMessage = error.message;
       authResponse.error = errorMessage;
-      console.log("no entra");
+
       return authResponse;
     });
 };
