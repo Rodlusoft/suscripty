@@ -4,7 +4,7 @@ import {
   signInWithEmailAndPassword,
   UserCredential,
 } from "firebase/auth";
-import TAuthOperation from "../interfaces/authOperation";
+import IAuthOperation from "../interfaces/authOperation";
 import IUser from "../interfaces/user";
 import { createNewUser, getUserById } from "./documents/users";
 import { getAvatarByUid, uploadImageToStorage } from "./storage";
@@ -14,11 +14,11 @@ export const signUpWithEmail: (
   password: string,
   username: string,
   image: File
-) => Promise<TAuthOperation> = async (email, password, username, image) => {
+) => Promise<IAuthOperation> = async (email, password, username, image) => {
   const auth = getAuth();
-  let authResponse: TAuthOperation = { status: false };
+  let authResponse: IAuthOperation = { status: false };
 
-  await createUserWithEmailAndPassword(auth, email, password)
+  return await createUserWithEmailAndPassword(auth, email, password)
     .then(async (userCredential: UserCredential) => {
       const user = userCredential.user;
       authResponse.uid = user.uid;
@@ -43,31 +43,34 @@ export const signUpWithEmail: (
 
       return authResponse;
     });
-
-  return authResponse;
 };
 
-export const signInWithEmail: (email: string, password: string) => Promise<TAuthOperation> =
-async (email, password) => {
-  const auth = getAuth()
-  let authResponse: TAuthOperation = { status: false }
+export const signInWithEmail: (
+  email: string,
+  password: string
+) => Promise<IAuthOperation> = async (email, password) => {
+  const auth = getAuth();
+  let authResponse: IAuthOperation = { status: false };
 
-  await signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential: UserCredential) => {
-      const user = userCredential.user
-      authResponse.uid = user.uid
-      authResponse.status = true
-      getUserById(user.uid)
+  console.log(`${email}`);
+  console.log(`${password}`);
 
-      return authResponse
+  return await signInWithEmailAndPassword(auth, email, password)
+    .then(async (userCredential: UserCredential) => {
+      console.log("entra");
+      const user = userCredential.user;
+      authResponse.uid = user.uid;
+      authResponse.status = true;
+      getUserById(user.uid);
+
+      console.log("entra");
+
+      return authResponse;
     })
     .catch((error) => {
-      const errorMessage = error.message
-      authResponse.error = errorMessage
-
-      return authResponse
-    })
-
-  return authResponse
-}
-
+      const errorMessage = error.message;
+      authResponse.error = errorMessage;
+      console.log("no entra");
+      return authResponse;
+    });
+};

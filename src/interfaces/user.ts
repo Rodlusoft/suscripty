@@ -5,6 +5,7 @@ interface IUser {
   username: string;
   email: string;
   avatar: any;
+  password?: string;
   suscriptionGroups?: [IGroup]
 }
 

@@ -1,56 +1,30 @@
-import { useRouter } from "next/router"
 import { useState } from "react"
-import ImagePicker from "../../components/auth/signUp/ImagePicker"
 import { AuthMethod } from "../../interfaces/authMethod"
-import User, { checkIfRegistryUserValid, selectSignUpAuthMethod } from "../../models/user"
+import User, { checkIfUserValid, selectSignInAuthMethod } from "../../models/user"
 
-const SignUpForm = () => {
+const SignIn = () => {
 
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
-  const [username, setUsername] = useState<string>("")
   const [isValidUser, setIsValidUser] = useState<boolean>(false)
-  const [image, setImage] = useState<File>()
   const [authMethod, setAuthMethod] = useState<AuthMethod>(AuthMethod.email)
-  const router = useRouter()
 
-  const handleClick = async () => {
-    const user = new User(email, password, username, image)
+  const checkUser: () => void = () => {
+    setIsValidUser(checkIfUserValid(email, password))
+  }
+
+  const handleClick: () => void = async () => {
     if (isValidUser) {
-      const response = await selectSignUpAuthMethod(authMethod, user)
-      console.log(`${response.uid}`);
+      const user = new User(email, password)
+      const response = await selectSignInAuthMethod(authMethod, user)
+      console.log(`${Object.values(response)}`);
     }
   }
 
-  const checkUser: () => void = () => {
-    setIsValidUser(checkIfRegistryUserValid(email, password, username))
-  }
-
-  const changeImage: (e: any) => void = (e) => {
-    setImage(e)
-  }
-
-  return (
+  return(
     <div className="flex w-full justify-center gap-8 px-8 mt-32 h-45">
       <div className="w-full max-w-xs ">
         <form className="px-8 border-2 pt-6 pb-8 mb-4 bg-white rounded shadow-md">
-          <div className="mb-4">
-            <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="email">
-              Username
-            </label>
-            <ImagePicker
-              changeImage={(e) => { changeImage(e) }}
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="email">
-              Username
-            </label>
-            <input className="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline" id="email" type="text" placeholder="Username" onChange={({ target }) => {
-              setUsername(target.value)
-              checkUser()
-            }} />
-          </div>
           <div className="mb-4">
             <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="email">
               Email
@@ -73,7 +47,7 @@ const SignUpForm = () => {
           </div>
           <div className="flex items-center justify-center">
             <button className="px-4 py-2 font-bold rounded-full" type="button" onClick={() => handleClick()} >
-              Sign Up
+              Sign In
             </button>
           </div>
         </form>
@@ -85,4 +59,4 @@ const SignUpForm = () => {
   )
 }
 
-export default SignUpForm 
+export default SignIn
