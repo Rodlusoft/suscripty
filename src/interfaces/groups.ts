@@ -1,11 +1,16 @@
 import IService from "./service";
 
 interface IGroup {
-  coSuscriptors: [string];
   creatorId: string;
   service: IService;
-  suscriptionPrice: number;
   nextPay: number;
+  id?: string;
+  coSuscriptorsId?: [string];
+}
+
+export interface IGroupResponse {
+  uid?: string;
+  status: boolean
 }
 
 export default IGroup;
